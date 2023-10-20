@@ -1,19 +1,28 @@
+import 'bootstrap/dist/css/bootstrap.css';
 import { Cartwidget } from "./Cartwidget";
 
 export const Navbar = () => {
-
-    return  ( 
-    <nav>
-        <div>ElectroLand</div>
-            <ul>
-                <li>Home</li>
-                <li>Electronica</li>
-                <li>Computadoras</li>
-                <li>Celulares</li>
-                <li>Consolas</li>
-            </ul>
-            <Cartwidget />
+  return (
+    <nav className="navbar navbar-expand-lg navbar-light bg-light">
+      <div className="navbar-brand">ElectroLand</div>
+      <ul className="navbar-nav">
+        <li className="nav-item">
+          <a className="nav-link" href="/">Home</a>
+        </li>
+        <li className="nav-item">
+          <a className="nav-link" href="/electronica">Electronica</a>
+        </li>
+        <li className="nav-item">
+          <a className="nav-link" href="/computadoras">Computadoras</a>
+        </li>
+        <li className="nav-item">
+          <a className="nav-link" href="/celulares">Celulares</a>
+        </li>
+        <li className="nav-item">
+          <a className="nav-link" href="/consolas">Consolas</a>
+        </li>
+      </ul>
+      <Cartwidget />
     </nav>
-
-    );
+  );
 };
