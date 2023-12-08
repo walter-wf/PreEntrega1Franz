@@ -1,36 +1,62 @@
+/* /* eslint-disable react/prop-types */
 import { useEffect, useState } from "react";
+import {
+  getFirestore,
+  collection,
+  getDocs,
+  query,
+  where,
+  limit,
+} from "firebase/firestore";
 import { useParams } from "react-router-dom";
-import PropTypes from "prop-types";
 import { Container } from "react-bootstrap";
-import React from "react";
-import { products } from "../data/products";
-import { ItemList } from "../components/ItemList";
+import ItemList from "../components/ItemList";
 
 export const ItemListContainer = (props) => {
-  //Usar los hooks antes del return ( ver la after class)
   const [items, setItems] = useState([]);
-
-  const { id }= useParams();
- 
+  const { id } = useParams();
 
   useEffect(() => {
-    const mypromise = new Promise((resolve, reject) => {
-      setTimeout(() => {
-        resolve(products);
-      }, 2000);
-    });
+    const fetchData = async () => {
+      const db = getFirestore();
+      const itemsCollection = collection(db, "items");
 
-    mypromise.then((response) => { 
-      if (!id) {
-        setItems(response)
-      } else {
-        const filterByCategory = response.filter(item => item.category === id);
-        setItems(filterByCategory)
+      try {
+        const snapshot = await getDocs(itemsCollection);
+
+        if (snapshot.size === 0) {
+          console.log("No hay resultados");
+        } else {
+          const data = snapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          }));
+          console.log(data);
+          setItems(data);
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
       }
-      })
+    };
+
+    fetchData();
   }, []);
 
-  console.log(items)
+  useEffect(() => {
+    const db = getFirestore();
+
+    const q = query(
+      collection(db, "items"),
+      where("categoryId", "==", "Consolas")
+    );
+
+    getDocs(q).then((snapshot) => {
+      if (snapshot.size === 0) console.log("No results");
+      else console.log(snapshot.doc.map((doc) => {}));
+    });
+  });
+
+  console.log(items);
 
   return (
     <Container className="mt-4">
